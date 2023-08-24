@@ -1,4 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../../../firebase/firebase.config";
 
 const initialState = {
   email: "",
@@ -7,24 +9,33 @@ const initialState = {
   isError: false,
   error: "",
 };
+const createUser = createAsyncThunk("auth/createUser", async ({ email, password }) => {
+  const data = await createUserWithEmailAndPassword(auth, email, password);
+  return data;
+});
 
 export const authSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {
-    increment: (state) => {
-      // Redux Toolkit allows us to write "mutating" logic in reducers. It
-      // doesn't actually mutate the state because it uses the Immer library,
-      // which detects changes to a "draft state" and produces a brand new
-      // immutable state based off those changes
-      state.value += 1;
-    },
-    decrement: (state) => {
-      state.value -= 1;
-    },
-    incrementByAmount: (state, action) => {
-      state.value += action.payload;
-    },
+  extraReducers: (builder) => {
+    builder
+      .addCase(createUser.pending, (state) => {
+        state.isLoading = true;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(createUser.fulfilled, (state, { payload }) => {
+        state.isLoading = false;
+        state.email = payload;
+        state.isError = false;
+        state.error = "";
+      })
+      .addCase(createUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.email = "";
+        state.isError = true;
+        state.error = action.error.message;
+      });
   },
 });
 
