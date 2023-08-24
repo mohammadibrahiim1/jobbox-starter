@@ -8,7 +8,7 @@ import auth from "../../firebase/firebase.config";
 
 const Navbar = () => {
   const { pathname } = useLocation();
-  const { email } = useSelector((state) => state.auth);
+  const { email, role } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -30,20 +30,35 @@ const Navbar = () => {
             Jobs
           </Link>
         </li>
+        {email && role && (
+          <li>
+            <Link
+              to="/dashboard"
+              className="border border-black px-2 py-1 btn btn-xs rounded-full hover:border-primary hover:text-white hover:bg-primary hover:px-4 transition-all "
+            >
+              Dashboard
+            </Link>
+          </li>
+        )}
+        {email && !role && (
+          <li>
+            <Link
+              to="/register"
+              className="border border-black px-2 py-1 btn btn-xs rounded-full hover:border-primary hover:text-white hover:bg-primary hover:px-4 transition-all"
+            >
+              Get start
+            </Link>
+          </li>
+        )}
 
         <li>
           {email ? (
-            <button
-              className="btn btn-xs"
-              onClick={handleSignOut}
-              // className="border border-black px-2 py-1 rounded-full hover:border-primary hover:text-white hover:bg-primary hover:px-4 transition-all "
-              // to="/login"
-            >
+            <button className="btn btn-xs" onClick={handleSignOut}>
               Logout
             </button>
           ) : (
             <Link
-              className="border border-black px-2 py-1 btn btn-xs rounded-full hover:border-primary hover:text-white hover:bg-primary hover:px-4 transition-all "
+              className="border border-black px-2 py-1 btn btn-xs rounded-full hover:border-primary hover:text-white hover:bg-primary hover:px-4 transition-all"
               to="/login"
             >
               Login

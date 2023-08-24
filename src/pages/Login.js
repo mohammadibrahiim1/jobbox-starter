@@ -4,9 +4,10 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import loginImage from "../assets/login.svg";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../redux/features/auth/authSlice";
+import { googleSignIn, loginUser } from "../redux/features/auth/authSlice";
+import { toast } from "react-hot-toast";
 const Login = () => {
-  const { email, isLoading } = useSelector((state) => state.auth);
+  const { email, isLoading, isError, error } = useSelector((state) => state.auth);
   const { register, handleSubmit, reset } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -17,12 +18,23 @@ const Login = () => {
     dispatch(loginUser({ email, password }));
   };
 
+  const handleGoogleSignIn = () => {
+    dispatch(googleSignIn());
+    toast.success("successfully login with gmail");
+  };
+
   useEffect(() => {
     if ((isLoading, email)) {
       reset();
       navigate("/");
     }
-  }, [isLoading, email]);
+  }, [email, isLoading, navigate, reset]);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(error);
+    }
+  }, [isError, error]);
 
   return (
     <div className="flex h-screen items-center">
@@ -46,6 +58,7 @@ const Login = () => {
                 </label>
                 <input type="password" id="password" {...register("password")} />
               </div>
+              {/* <div>{isError && <p className="text-xs text-red-500 font-semibold text-center ">{error}</p>}</div> */}
               <div className="relative !mt-8">
                 <button type="submit" className="font-bold text-white py-3 rounded-full bg-primary w-full">
                   Login
@@ -59,6 +72,13 @@ const Login = () => {
                   </span>
                 </p>
               </div>
+              <button
+                onClick={handleGoogleSignIn}
+                type="submit"
+                className="font-bold text-white py-3 rounded-full bg-primary w-full"
+              >
+                Login with google
+              </button>
             </div>
           </form>
         </div>
