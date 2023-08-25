@@ -18,7 +18,7 @@ const jobApi = apiSlice.injectEndpoints({
     }),
     getJobById: builder.query({
       query: (id) => ({
-        url: `/job/${id}`,
+        url: `/job-details/${id}`,
         // method: "POST",
         // body: data,
       }),

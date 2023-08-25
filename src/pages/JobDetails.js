@@ -38,7 +38,7 @@ const JobDetails = () => {
           <div>
             <h1 className="text-primary text-lg font-medium mb-3">Skills</h1>
             <ul>
-              {skills.map((skill) => (
+              {skills?.map((skill) => (
                 <li className="flex items-center">
                   <BsArrowRightShort /> <span>{skill}</span>
                 </li>
@@ -48,7 +48,7 @@ const JobDetails = () => {
           <div>
             <h1 className="text-primary text-lg font-medium mb-3">Requirements</h1>
             <ul>
-              {requirements.map((skill) => (
+              {requirements?.map((skill) => (
                 <li className="flex items-center">
                   <BsArrowRightShort /> <span>{skill}</span>
                 </li>
@@ -58,7 +58,7 @@ const JobDetails = () => {
           <div>
             <h1 className="text-primary text-lg font-medium mb-3">Responsibilities</h1>
             <ul>
-              {responsibilities.map((skill) => (
+              {responsibilities?.map((skill) => (
                 <li className="flex items-center">
                   <BsArrowRightShort /> <span>{skill}</span>
                 </li>
@@ -71,7 +71,7 @@ const JobDetails = () => {
           <div>
             <h1 className="text-xl font-semibold text-primary mb-5">General Q&A</h1>
             <div className="text-primary my-2">
-              {queries.map(({ question, email, reply, id }) => (
+              {queries?.map(({ question, email, reply, id }) => (
                 <div>
                   <small>{email}</small>
                   <p className="text-lg font-medium">{question}</p>

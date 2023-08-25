@@ -15,7 +15,7 @@ const Jobs = () => {
         <h1 className="font-semibold text-xl">Find Jobs</h1>
       </div>
       <div className="grid grid-cols-2 gap-5 mt-5">
-        {jobs.map((job) => (
+        {jobs?.map((job) => (
           <JobCard job={job} />
         ))}
       </div>
