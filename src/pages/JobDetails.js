@@ -152,7 +152,6 @@ const JobDetails = () => {
           <div>
             <p>Website</p>
             <Link className="font-semibold text-lg" to="https://website.com"></Link>
-            <Link className="font-semibold text-lg" to="https://website.com"></Link>
           </div>
         </div>
       </div>

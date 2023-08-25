@@ -8,12 +8,18 @@ import { useSelector } from "react-redux";
 const EmployerRegistration = () => {
   const [countries, setCountries] = useState([]);
   console.log(countries);
+  const {
+    user: { email },
+  } = useSelector((state) => state.auth);
 
   const [postUser, { isLoading, isError, error }] = useRegisterMutation();
   console.log(isLoading, isError, error);
-  const { email } = useSelector((state) => state.auth);
 
-  const { handleSubmit, register, control } = useForm();
+  const { handleSubmit, register, control } = useForm({
+    defaultValues: {
+      email,
+    },
+  });
   const term = useWatch({ control, name: "term" });
   const navigate = useNavigate();
 
@@ -79,7 +85,7 @@ const EmployerRegistration = () => {
             <label className="mb-2" htmlFor="email">
               Email
             </label>
-            <input type="email" id="email" defaultValue={email} {...register("email")} />
+            <input type="email" id="email" disabled {...register("email")} />
           </div>
           <div className="flex flex-col w-full max-w-xs">
             <h1 className="mb-3">Gender</h1>
