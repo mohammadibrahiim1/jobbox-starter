@@ -3,14 +3,15 @@ import React from "react";
 import meeting from "../assets/meeting.jpg";
 import { BsArrowRightShort, BsArrowReturnRight } from "react-icons/bs";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { useGetJobByIdQuery } from "../redux/features/job/jobApi";
+import { useApplyJobMutation, useGetJobByIdQuery } from "../redux/features/job/jobApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
 
 const JobDetails = () => {
   const { user } = useSelector((state) => state.auth);
+  console.log(user);
   const { id } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const {
     companyName,
     // position,
@@ -30,22 +31,25 @@ const JobDetails = () => {
   const { data } = useGetJobByIdQuery(id);
   console.log(data?.data);
 
-  const { position, _id } = data?.data || {};
+  const { position } = data?.data || {};
+
+  const [applyJob] = useApplyJobMutation();
 
   const handleApply = () => {
     if (user.role === "employer") {
       toast.error("you need a candidate account to apply");
     }
     if (user.role === "") {
-      navigate("/register");
-      return;
+      // navigate("/register");
+      const data = {
+        userId: user._id,
+        userEmail: user.email,
+        jobId: id,
+      };
+      applyJob(data);
+      console.log(data);
+      // return;
     }
-    const data = {
-      userId: user._id,
-      userEmail: user.email,
-      jobId: _id,
-    };
-    console.log(data);
   };
 
   return (

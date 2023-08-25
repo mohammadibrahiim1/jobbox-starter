@@ -11,6 +11,7 @@ const initialState = {
   user: {
     email: "",
     role: "",
+   
   },
   isLoading: true,
   isError: false,
@@ -45,7 +46,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logOut: (state) => {
-      state.user = { email: "", role: "" };
+      state.user = { email: "", role: "", };
     },
     setUser: (state, { payload }) => {
       state.user = payload;
