@@ -2,11 +2,13 @@ import React from "react";
 
 import meeting from "../assets/meeting.jpg";
 import { BsArrowRightShort, BsArrowReturnRight } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { useGetJobByIdQuery } from "../redux/features/job/jobApi";
 const JobDetails = () => {
+  const { id } = useParams();
   const {
     companyName,
-    position,
+    // position,
     location,
     experience,
     workLevel,
@@ -20,6 +22,11 @@ const JobDetails = () => {
     // _id,
   } = {};
 
+  const { data, isLoading, idError } = useGetJobByIdQuery(id);
+  console.log(data?.data);
+
+  const { position } = data?.data || {};
+
   return (
     <div className="pt-14 grid grid-cols-12 gap-5">
       <div className="col-span-9 mb-10">
@@ -28,7 +35,7 @@ const JobDetails = () => {
         </div>
         <div className="space-y-5">
           <div className="flex justify-between items-center mt-5">
-            <h1 className="text-xl font-semibold text-primary">{position}</h1>
+            <h1 className="text-xl font-semibold text-primary"> Position : {position}</h1>
             <button className="btn">Apply</button>
           </div>
           <div>
