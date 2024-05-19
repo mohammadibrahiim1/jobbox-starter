@@ -1,7 +1,7 @@
-import { apiSlice } from "../api/apiSlice";
+import { baseApi } from "../api/baseApi";
 import { getUser } from "./authSlice";
 
-const authApi = apiSlice.injectEndpoints({
+const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     register: builder.mutation({
       query: (data) => ({
@@ -12,6 +12,7 @@ const authApi = apiSlice.injectEndpoints({
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
         try {
           const res = await queryFulfilled;
+          console.log(res);
           await dispatch(getUser(data.email));
         } catch (error) {
           // console.log(error);

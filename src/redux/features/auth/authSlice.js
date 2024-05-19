@@ -4,6 +4,7 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
+  updateProfile,
 } from "firebase/auth";
 import auth from "../../../firebase/firebase.config";
 
@@ -11,16 +12,25 @@ const initialState = {
   user: {
     email: "",
     role: "",
-   
   },
   isLoading: true,
   isError: false,
   error: "",
 };
-export const createUser = createAsyncThunk("auth/createUser", async ({ email, password }) => {
-  const data = await createUserWithEmailAndPassword(auth, email, password);
-  return data.user.email;
-});
+export const createUser = createAsyncThunk(
+  "auth/createUser",
+  async ({ name, email, password }) => {
+    const data = await createUserWithEmailAndPassword(auth, email, password);
+    await updateProfile(auth.currentUser, {
+      displayName: name,
+    });
+
+    console.log(data);
+    
+    return data.user.email;
+  }
+);
+
 export const getUser = createAsyncThunk("auth/getUser", async (email) => {
   const res = await fetch(`http://localhost:5000/user/${email}`);
   const data = await res.json();
@@ -30,10 +40,13 @@ export const getUser = createAsyncThunk("auth/getUser", async (email) => {
   return email;
 });
 
-export const loginUser = createAsyncThunk("auth/loginUser", async ({ email, password }) => {
-  const data = await signInWithEmailAndPassword(auth, email, password);
-  return data.user.email;
-});
+export const loginUser = createAsyncThunk(
+  "auth/loginUser",
+  async ({ email, password }) => {
+    const data = await signInWithEmailAndPassword(auth, email, password);
+    return data.user.email;
+  }
+);
 
 export const googleSignIn = createAsyncThunk("auth/googleSignIn", async () => {
   const googleProvider = new GoogleAuthProvider();
@@ -46,7 +59,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logOut: (state) => {
-      state.user = { email: "", role: "", };
+      state.user = { email: "", role: "" };
     },
     setUser: (state, { payload }) => {
       state.user = payload;
