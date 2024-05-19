@@ -4,6 +4,8 @@ import { useForm, useWatch } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createUser } from "../redux/features/auth/authSlice";
+import { useRegisterUserMutation } from "../redux/features/auth/authApi";
+
 // import { toast } from "react-hot-toast";
 const Signup = () => {
   const { handleSubmit, register, reset, control } = useForm();
@@ -13,6 +15,8 @@ const Signup = () => {
   const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
   // const { isError, error } = useSelector((state) => state.auth);
+  const { registerUser } = useRegisterUserMutation();
+
   useEffect(() => {
     if (
       password !== undefined &&
@@ -27,17 +31,29 @@ const Signup = () => {
     }
   }, [password, confirmPassword]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
     dispatch(createUser({ email: data.email, password: data.password }));
     reset();
-    
+
+    dispatch(await registerUser(data));
   };
 
   // const handleGoogleSignIn = () => {
   //   dispatch(googleSignIn());
   //   toast.success("user log in successfully");
   // };
+
+  const roleOptions = [
+    { value: "admin", label: "Admin" },
+    { value: "teacher", label: "Teacher" },
+    { value: "staff", label: "Staff" },
+  ];
+  const timeOptions = [
+    { value: "9.30-12.30", label: "9.30-12.30" },
+    { value: "2.30-5.30", label: "2.30-05.30" },
+    { value: "6.30-9.30", label: "6.30-9.30" },
+  ];
 
   return (
     <div className="py-28">
@@ -56,7 +72,7 @@ const Signup = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="card-body">
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Name</span>
+                <span className="label-text">Teacher Name</span>
               </label>
               <input
                 type="text"
@@ -94,6 +110,54 @@ const Signup = () => {
                 {...register("phone")}
               />
             </div>
+            <select
+              {...register("userType")}
+              className="select select-accent w-full max-w-xs focus:outline-none input input-bordered  border-[#A7EABA]"
+            >
+              {roleOptions?.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <select
+              {...register("time")}
+              className="select select-accent w-full max-w-xs focus:outline-none input input-bordered  border-[#A7EABA]"
+            >
+              {timeOptions?.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">class number</span>
+              </label>
+              <input
+                type="number"
+                name="password"
+                placeholder="class number"
+                id="password"
+                className="input input-bordered focus:outline-none border-[#A7EABA]"
+                required
+                {...register("password")}
+              />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">amount</span>
+              </label>
+              <input
+                type="text"
+                name="password"
+                placeholder="class number"
+                id="password"
+                className="input input-bordered focus:outline-none border-[#A7EABA]"
+                required
+                {...register("password")}
+              />
+            </div>
             <div className="form-control">
               <label className="label">
                 <span className="label-text">New Password</span>
@@ -129,7 +193,7 @@ const Signup = () => {
                   Already Register?
                   <Link
                     className="label-text-alt link link-hover font-semibold text-green-400"
-                    href={"/"}
+                    to={"/login"}
                   >
                     Login
                   </Link>
@@ -143,7 +207,7 @@ SL    Teacher Name Batch             09:30-12:30      02:30-05:30       06:30-09
             <div className="form-control mt-6">
               <button
                 disabled={disabled}
-                className="btn bg-[#A7EABA] hover:bg-[#92E5A8] duration-300"
+                className="btn bg-[#A7EABA] hover:bg-[#92E5A8] duration-300 text-gray-500"
               >
                 Register
               </button>

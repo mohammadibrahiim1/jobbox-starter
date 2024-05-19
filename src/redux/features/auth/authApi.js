@@ -3,10 +3,10 @@ import { getUser } from "./authSlice";
 
 const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation({
+    registerUser: builder.mutation({
       query: (data) => ({
-        url: "/user",
-        method: "POST",
+        url: "/login",
+        method: "PUT",
         body: data,
       }),
       async onQueryStarted(data, { dispatch, queryFulfilled }) {
@@ -22,4 +22,4 @@ const authApi = baseApi.injectEndpoints({
   }),
 });
 
-export const { useRegisterMutation } = authApi;
+export const { useRegisterUserMutation } = authApi;

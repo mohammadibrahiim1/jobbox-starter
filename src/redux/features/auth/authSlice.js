@@ -11,7 +11,7 @@ import auth from "../../../firebase/firebase.config";
 const initialState = {
   user: {
     email: "",
-    role: "",
+    userType: "",
   },
   isLoading: true,
   isError: false,
@@ -19,15 +19,14 @@ const initialState = {
 };
 export const createUser = createAsyncThunk(
   "auth/createUser",
-  async ({ name, email, password }) => {
+  async ({ name, email, password, userType }) => {
     const data = await createUserWithEmailAndPassword(auth, email, password);
     await updateProfile(auth.currentUser, {
       displayName: name,
     });
 
     console.log(data);
-    
-    return data.user.email;
+    return { email: data.user.email, userType: data.user.userType };
   }
 );
 
