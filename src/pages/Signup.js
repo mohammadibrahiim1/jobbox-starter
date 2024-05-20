@@ -4,6 +4,14 @@ import { useForm, useWatch } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createUser } from "../redux/features/auth/authSlice";
+import {
+  RecaptchaVerifier,
+  signInWithCredential,
+  signInWithPhoneNumber,
+  updateProfile,
+} from "firebase/auth";
+import auth from "../firebase/firebase.config";
+import { PhoneAuthProvider } from "firebase/auth/react-native";
 // import { useRegisterUserMutation } from "../redux/features/auth/authApi";
 
 // import { toast } from "react-hot-toast";
@@ -11,12 +19,16 @@ const Signup = () => {
   const { handleSubmit, register, reset, control } = useForm();
   const password = useWatch({ control, name: "password" });
   const confirmPassword = useWatch({ control, name: "confirmPassword" });
+
+  // const [phoneNumber, setPhoneNumber] = useState("");
+  // const [otp, setOtp] = useState("");
+  // const [verificationId, setVerificationId] = useState(null);
+  // const [messsage, setMessage] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
+
   const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
-  // const { isError, error } = useSelector((state) => state.auth);
-  // const { registerUser } = useRegisterUserMutation();
-
   useEffect(() => {
     if (
       password !== undefined &&
@@ -31,13 +43,76 @@ const Signup = () => {
     }
   }, [password, confirmPassword]);
 
+  // const setUpRecaptcha = () => {
+  //   if (!window.recaptchaVerifier) {
+  //     window.recaptchaVerifier = new RecaptchaVerifier(
+  //       "recaptcha-container",
+  //       {
+  //         size: "invisible",
+  //         callback: (response) => {},
+  //       },
+  //       auth
+  //     );
+  //   }
+  // };
+
+  // const submitPhoneNumberAuth = (e) => {
+  //   e.preventDefault();
+  //   setUpRecaptcha();
+  //   const appVerifier = window.recaptchaVerifier;
+  //   signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+  //     .then((confirmationResult) => {
+  //       setVerificationId(confirmationResult.verificationId);
+  //       setMessage("OTP sent to your phone");
+  //     })
+  //     .catch((error) => {
+  //       setMessage(error.message);
+  //     });
+  // };
+
+  // const verifyOtp = (e) => {
+  //   e.preventDefault();
+  //   const credential = auth.PhoneAuthProvider.credential(verificationId, otp);
+
+  //   auth.currentUser
+  //     .linkWithCredential(credential)
+  //     .then((usercred) => {
+  //       const user = usercred.user;
+  //       dispatch(updateProfile({ phoneNumber: user.phoneNumber }));
+  //       setMessage(" Phone number linked successfully");
+  //     })
+  //     .catch((error) => {
+  //       setMessage(error.message);
+  //     });
+  // };
+
   const onSubmit = async (data) => {
     console.log(data);
-    dispatch(createUser({ email: data.email, password: data.password }));
+    dispatch(
+      createUser({
+        name: data?.name,
+        email: data.email,
+        password: data.password,
+      })
+    );
     reset();
     navigate("/register");
 
     // dispatch(await registerUser({ ...data }));
+  };
+
+  const handleVerifyCode = async () => {
+    const credential = PhoneAuthProvider.credential(
+      verificationCode,
+      verificationCode
+    );
+
+    try {
+      await signInWithCredential(credential);
+      console.log("Phone number verified successfully");
+    } catch (error) {
+      console.log("Error verification code", error);
+    }
   };
 
   return (
@@ -87,9 +162,9 @@ const Signup = () => {
                 <span className="label-text">Phone</span>
               </label>
               <input
-                type="text"
-                placeholder="phone"
-                name="phone"
+                type="tel"
+                placeholder="Phone Number"
+                value={phoneNumber}
                 className="input input-bordered focus:outline-none border-[#A7EABA]"
                 required
                 {...register("phone")}

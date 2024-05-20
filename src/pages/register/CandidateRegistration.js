@@ -5,9 +5,11 @@ import { FaChevronLeft } from "react-icons/fa";
 import ReactDatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { format, parse } from "date-fns";
+import { useRegisterTeacherMutation } from "../../redux/features/auth/authApi";
 
 const CandidateRegistration = () => {
   const [countries, setCountries] = useState([]);
+
   // console.log(countries);
   const { handleSubmit, register, control, watch, setValue } = useForm({
     mode: "onChanges",
@@ -26,8 +28,13 @@ const CandidateRegistration = () => {
 
   const selectedDate = watch("date");
 
+  const [registerTeacher, { isLoading, isError }] =
+    useRegisterTeacherMutation();
+
   const onSubmit = (data) => {
     console.log(data);
+
+    registerTeacher({ ...data, role: "teacher" });
   };
 
   return (
@@ -75,6 +82,17 @@ const CandidateRegistration = () => {
             <option>09:30-12:30</option>
             <option>02:30-05:30</option>
             <option>06:30-09:30</option>
+          </select>
+          <select
+            {...register("batch")}
+            className="select select-accent w-full max-w-xs"
+          >
+            <option disabled selected>
+              Select Batch
+            </option>
+            <option>alpha</option>
+            <option>alpha + beta</option>
+            <option>beta</option>
           </select>
           <select
             {...register("selectedTopics")}

@@ -1,12 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import {
   GoogleAuthProvider,
+  RecaptchaVerifier,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signInWithPopup,
-  updateProfile,
+  // updateProfile,
 } from "firebase/auth";
 import auth from "../../../firebase/firebase.config";
+import { PhoneAuthProvider } from "firebase/auth/react-native";
 
 const initialState = {
   user: {
@@ -19,14 +21,38 @@ const initialState = {
 };
 export const createUser = createAsyncThunk(
   "auth/createUser",
-  async ({ name, email, password, userType }) => {
-    const data = await createUserWithEmailAndPassword(auth, email, password);
-    await updateProfile(auth.currentUser, {
-      displayName: name,
-    });
+  async ({ name, email, password, phoneNumber }, thunkAPI) => {
+    try {
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const user = userCredential.user;
 
-    console.log(data);
-    return { email: data.user.email, userType: data.user.userType };
+      // update user profile
+      await user.updateProfile(auth.currentUser, {
+        phoneNumber: phoneNumber,
+        displayName: name,
+      });
+
+      // send verification code
+      const phoneProvider = new PhoneAuthProvider();
+      const verificationId = await phoneProvider.verifyPhoneNumber(
+        phoneNumber,
+        new RecaptchaVerifier("recaptcha-container")
+      );
+      return { email: userCredential.user.email, verificationId };
+    } catch (error) {
+      return thunkAPI.rejectWithValue(error.message);
+    }
+    // const data = await createUserWithEmailAndPassword(auth, email, password);
+    // await updateProfile(auth.currentUser, {
+    //   displayName: name,
+    // });
+
+    // console.log(data);
+    // return data.user.email;
   }
 );
 
@@ -79,6 +105,7 @@ export const authSlice = createSlice({
       .addCase(createUser.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.user.email = payload;
+        state.verificationId = payload;
         state.isError = false;
         state.error = "";
       })
