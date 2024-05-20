@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
-import { useRegisterUserMutation } from "../../redux/features/auth/authApi";
+// import { useRegisterUserMutation } from "../../redux/features/auth/authApi";
 import { useSelector } from "react-redux";
 
 const EmployerRegistration = () => {
@@ -12,8 +12,8 @@ const EmployerRegistration = () => {
     user: { email },
   } = useSelector((state) => state.auth);
 
-  const [postUser, { isLoading, isError, error }] = useRegisterUserMutation();
-  console.log(isLoading, isError, error);
+  // const [postUser, { isLoading, isError, error }] = useRegisterUserMutation();
+  // console.log(isLoading, isError, error);
 
   const { handleSubmit, register, control } = useForm({
     defaultValues: {
@@ -54,7 +54,7 @@ const EmployerRegistration = () => {
 
   const onSubmit = (data) => {
     console.log(data);
-    postUser({ ...data, role: "employer" });
+    // postUser({ ...data, role: "employer" });
   };
 
   return (

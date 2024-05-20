@@ -7,15 +7,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { googleSignIn, loginUser } from "../redux/features/auth/authSlice";
 import { toast } from "react-hot-toast";
 const Login = () => {
-  const { email, isLoading, isError, error } = useSelector((state) => state.auth);
+  const { email, isLoading, isError, error } = useSelector(
+    (state) => state.auth
+  );
   const { register, handleSubmit, reset } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const onSubmit = ({ email, password }) => {
     console.log({ email, password });
-
     dispatch(loginUser({ email, password }));
+    navigate("/register");
   };
 
   const handleGoogleSignIn = () => {
@@ -56,18 +58,28 @@ const Login = () => {
                 <label htmlFor="password" className="ml-5">
                   Password
                 </label>
-                <input type="password" id="password" {...register("password")} />
+                <input
+                  type="password"
+                  id="password"
+                  {...register("password")}
+                />
               </div>
               {/* <div>{isError && <p className="text-xs text-red-500 font-semibold text-center ">{error}</p>}</div> */}
               <div className="relative !mt-8">
-                <button type="submit" className="font-bold text-white py-3 rounded-full bg-primary w-full">
+                <button
+                  type="submit"
+                  className="font-bold text-white py-3 rounded-full bg-primary w-full"
+                >
                   Login
                 </button>
               </div>
               <div>
                 <p>
                   Don't have an account?{" "}
-                  <span className="text-primary hover:underline cursor-pointer" onClick={() => navigate("/signup")}>
+                  <span
+                    className="text-primary hover:underline cursor-pointer"
+                    onClick={() => navigate("/signup")}
+                  >
                     Sign up
                   </span>
                 </p>

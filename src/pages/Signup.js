@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 // import loginImage from "../assets/login.svg";
 import { useForm, useWatch } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { createUser } from "../redux/features/auth/authSlice";
-import { useRegisterUserMutation } from "../redux/features/auth/authApi";
+// import { useRegisterUserMutation } from "../redux/features/auth/authApi";
 
 // import { toast } from "react-hot-toast";
 const Signup = () => {
   const { handleSubmit, register, reset, control } = useForm();
   const password = useWatch({ control, name: "password" });
   const confirmPassword = useWatch({ control, name: "confirmPassword" });
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const [disabled, setDisabled] = useState(true);
   const dispatch = useDispatch();
   // const { isError, error } = useSelector((state) => state.auth);
-  const { registerUser } = useRegisterUserMutation();
+  // const { registerUser } = useRegisterUserMutation();
 
   useEffect(() => {
     if (
@@ -35,25 +35,10 @@ const Signup = () => {
     console.log(data);
     dispatch(createUser({ email: data.email, password: data.password }));
     reset();
+    navigate("/register");
 
-    dispatch(await registerUser(data));
+    // dispatch(await registerUser({ ...data }));
   };
-
-  // const handleGoogleSignIn = () => {
-  //   dispatch(googleSignIn());
-  //   toast.success("user log in successfully");
-  // };
-
-  const roleOptions = [
-    { value: "admin", label: "Admin" },
-    { value: "teacher", label: "Teacher" },
-    { value: "staff", label: "Staff" },
-  ];
-  const timeOptions = [
-    { value: "9.30-12.30", label: "9.30-12.30" },
-    { value: "2.30-5.30", label: "2.30-05.30" },
-    { value: "6.30-9.30", label: "6.30-9.30" },
-  ];
 
   return (
     <div className="py-28">
@@ -72,12 +57,12 @@ const Signup = () => {
           <form onSubmit={handleSubmit(onSubmit)} className="card-body">
             <div className="form-control">
               <label className="label">
-                <span className="label-text">Teacher Name</span>
+                <span className="label-text">Full Name</span>
               </label>
               <input
                 type="text"
-                placeholder="name"
-                name="name"
+                placeholder="Full name"
+                name="Full name"
                 className="input input-bordered focus:outline-none border-[#A7EABA]"
                 required
                 {...register("name")}
@@ -110,7 +95,7 @@ const Signup = () => {
                 {...register("phone")}
               />
             </div>
-            <select
+            {/* <select
               {...register("userType")}
               className="select select-accent w-full max-w-xs focus:outline-none input input-bordered  border-[#A7EABA]"
             >
@@ -119,8 +104,8 @@ const Signup = () => {
                   {option.label}
                 </option>
               ))}
-            </select>
-            <select
+            </select> */}
+            {/* <select
               {...register("time")}
               className="select select-accent w-full max-w-xs focus:outline-none input input-bordered  border-[#A7EABA]"
             >
@@ -129,8 +114,8 @@ const Signup = () => {
                   {option.label}
                 </option>
               ))}
-            </select>
-            <div className="form-control">
+            </select> */}
+            {/* <div className="form-control">
               <label className="label">
                 <span className="label-text">class number</span>
               </label>
@@ -143,8 +128,8 @@ const Signup = () => {
                 required
                 {...register("password")}
               />
-            </div>
-            <div className="form-control">
+            </div> */}
+            {/* <div className="form-control">
               <label className="label">
                 <span className="label-text">amount</span>
               </label>
@@ -157,7 +142,7 @@ const Signup = () => {
                 required
                 {...register("password")}
               />
-            </div>
+            </div> */}
             <div className="form-control">
               <label className="label">
                 <span className="label-text">New Password</span>

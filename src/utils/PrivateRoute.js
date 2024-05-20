@@ -13,7 +13,7 @@ const PrivateRoute = ({ children }) => {
   // const email = "test@gmail.com";
 
   if (isLoading) {
-    return <Loading />;
+    return <Loading  />;
   }
 
   if (!isLoading && !email) {

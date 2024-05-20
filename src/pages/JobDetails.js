@@ -2,7 +2,7 @@ import React from "react";
 
 import meeting from "../assets/meeting.jpg";
 import { BsArrowRightShort, BsArrowReturnRight } from "react-icons/bs";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link,  useParams } from "react-router-dom";
 import { useApplyJobMutation, useGetJobByIdQuery } from "../redux/features/job/jobApi";
 import { useSelector } from "react-redux";
 import { toast } from "react-hot-toast";
