@@ -8,7 +8,7 @@ import { format, parse } from "date-fns";
 
 const CandidateRegistration = () => {
   const [countries, setCountries] = useState([]);
-  console.log(countries);
+  // console.log(countries);
   const { handleSubmit, register, control, watch, setValue } = useForm({
     mode: "onChanges",
     reValidateMode: "onChange",
@@ -17,19 +17,6 @@ const CandidateRegistration = () => {
   const term = useWatch({ control, name: "term" });
   console.log(term);
   const navigate = useNavigate();
-
-  // const { register, handleSubmit, control, setValue } = useForm();
-  // const [date, setDate] = useState(new Date(Date.now()));
-  // console.log(date);
-
-  // const [startDate, setStartDate] = useState(new Date());
-  // console.log(startDate);
-
-  // const handleChange = (dateChange) => {
-  //   console.log(dateChange);
-  //   setValue("dateOfClass", dateChange);
-  //   setDate(dateChange);
-  // };
 
   useEffect(() => {
     fetch("https://restcountries.com/v3.1/all")
